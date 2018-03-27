@@ -1,0 +1,50 @@
+	.data
+		.equ UART0, 0x860 
+	  
+		.global main
+		.text	
+main: 
+
+num1:		movia r15, UART0
+		call nr_uart_rxchar
+		blt r2, r0, num1
+		
+		mov r6, r2
+		movia r16, 46	
+		subi r6, r6, 48
+		
+num2:		movia r15, UART0
+		call nr_uart_rxchar
+	        blt r2, r0, num2   
+	        mov r7, r2
+	         
+num3:		movia r15, UART0
+		call nr_uart_rxchar
+	        blt r2, r0, num3	
+	        mov r5, r2
+	        subi r5, r5, 48
+	      
+append:       muli r6, r6, 10
+	      subi r7, r7, 48
+	      add r6, r6, r7
+	      mov r4, r6      		
+	      
+      mov r9, r4  
+      movi r1, 1 
+     
+     beq r5, r0, exit1		
+     beq r5, r1, exit2	
+      		
+loop: mul r10, r9, r4
+      mov r9, r10
+      subi r5, r5, 1
+      bne r5, r1, loop
+      br exit		
+
+exit1:
+	movi r10, 1			
+	br exit			
+
+exit2:
+	mov r10, r9			
+exit:

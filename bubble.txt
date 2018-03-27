@@ -1,0 +1,80 @@
+	.data
+		.equ UART0, 0x860   
+	        
+vetor: .word 0,0,0,0,0
+
+		.global main
+		.text
+
+main: movi r1, 5
+      movia r6, vetor 
+      mov r7, r6
+	 
+num1:	movia r15, UART0
+	call nr_uart_rxchar
+	blt r2, r0, num1	
+	mov r5, r2
+	subi r5, r5, 48
+	stw r5, 0(r7)
+	addi r7, r7, 4
+
+num2:	movia r15, UART0
+	call nr_uart_rxchar
+	blt r2, r0, num2
+	mov r5, r2
+	subi r5, r5, 48
+	stw r5, 0(r7)
+	addi r7, r7, 4
+	
+num3:	movia r15, UART0
+	call nr_uart_rxchar
+	blt r2, r0, num3
+	mov r5, r2
+	subi r5, r5, 48
+	stw r5, 0(r7)
+	addi r7, r7, 4
+	
+num4:	movia r15, UART0
+	call nr_uart_rxchar
+	blt r2, r0, num4
+	mov r5, r2
+	subi r5, r5, 48
+	stw r5, 0(r7)
+	addi r7, r7, 4  
+	
+num5:	movia r15, UART0
+	call nr_uart_rxchar
+	blt r2, r0, num5
+	mov r5, r2
+	subi r5, r5, 48
+	stw r5, 0(r7)
+	addi r7, r7, 4
+	
+	
+      mov r19, r0
+      mov r20, r0
+      mov r2, r1
+      
+outerfor: addi r19, r19, 1
+	  subi r2, r2, 1
+ 	  mov r20, r0
+ 	  bge r19, r1, exit1
+	  br innerfor   	  
+  
+innerfor: 
+	  muli r11, r20, 4
+	  add r13, r11, r6
+	  ldw r12, 0(r13)
+	  ldw r14, 4(r13)
+	  addi r20, r20, 1
+	  bgt r12, r14, swap
+	  bge r20, r2, outerfor
+	  br innerfor
+  
+swap: 
+      stw r14, 0(r13)
+      stw r12, 4(r13)
+      bge r20, r2, outerfor
+      br innerfor
+      
+exit1:
